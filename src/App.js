@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Application Meteo</h1>
+      <h1>Application Meteo </h1>
       <Location onLocation={handleLocation} />
       {location && <Weather location={location} />}
     </div>
