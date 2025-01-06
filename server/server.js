@@ -1,29 +1,23 @@
 const express = require('express');
-const cors = require('cors');  // Aggiungi il pacchetto cors
+const cors = require('cors');
 const app = express();
 const port = 5001;
 
-app.use(cors()); // Abilita il CORS
-app.use(express.json()); // Per elaborare il JSON nel corpo delle richieste
+app.use(cors()); 
+app.use(express.json()); 
 
 app.post('/api/weather', (req, res) => {
-    const { temperature, humidity, windSpeed } = req.body;
+    const { temperature, humidity, windSpeed, windDirection, cloudCoverage } = req.body;
 
-    if (!temperature || !humidity || !windSpeed) {
-        return res.status(400).json({ message: 'Dati incompleti' });
+    if (!temperature || !humidity || !windSpeed || !windDirection || cloudCoverage === undefined) {
+        return res.status(400).json({ message: 'Données incomplètes' });
     }
 
-    console.log('Dati meteo ricevuti:', { temperature, humidity, windSpeed });
+    console.log('Données météorologiques reçues:', { temperature, humidity, windSpeed, windDirection,cloudCoverage });
 
-    res.status(200).json({ message: 'Dati ricevuti con successo!' });
-});
-
-// Middleware per la gestione degli errori generali
-app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ message: 'Errore interno del server' });
+    res.status(200).json({ message: 'Données reçues avec succès!' });
 });
 
 app.listen(port, () => {
-    console.log(`Server in esecuzione sulla porta ${port}`);
+    console.log(`Serveur exécuté sur le port ${port}`);
 });

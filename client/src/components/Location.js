@@ -14,21 +14,21 @@ const Location = ({ onLocation }) => {
                     onLocation({ lat: latitude, lon: longitude });
                 },
                 (err) => {
-                    setError("Impossibile ottenere la posizione."); // Salviamo l'errore
+                    setError("Impossible d'obtenir l'emplacement."); // Salviamo l'errore
                 }
             );
         } else {
-            setError("La geolocalizzazione non è supportata dal browser."); // Messaggio per browser non compatibili
+            setError("La géolocalisation n'est pas supportée par le navigateur."); 
         }
-    }, [onLocation]); // useEffect si attiva ogni volta che cambia la funzione onLocation
+    }, [onLocation]); 
 
     return (
         <div>
-            {error && <p style={{ color: "red" }}>{error}</p>} {/* Mostriamo eventuali errori */}
+            {error && <p style={{ color: "red" }}>{error}</p>} 
             {location.lat && location.lon ? (
                 <p>Position: Lat {location.lat}, Lon {location.lon}</p> 
             ) : (
-            <p>Ottenendo la posizione...</p> 
+            <p>Obtenir le poste...</p> 
       )}
         </div>
     );

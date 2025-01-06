@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Weather = () => {
-    const [weather, setWeather] = useState(null); // Stato per i dati meteo
-    const [cityName, setCityName] = useState(""); // Stato per il nome della città
-    const [location, setLocation] = useState(null); // Stato per la posizione geografica
-    const [error, setError] = useState(null); // Stato per gestire errori
-    const [loading, setLoading] = useState(false); // Stato per il caricamento
+    const [weather, setWeather] = useState(null); 
+    const [cityName, setCityName] = useState(""); 
+    const [location, setLocation] = useState(null); 
+    const [error, setError] = useState(null); 
+    const [loading, setLoading] = useState(false); 
 
-    // Funzione per ottenere la posizione dell'utente
+    
     const getLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -17,18 +17,18 @@ const Weather = () => {
                     setLocation({ latitude, longitude });
                 },
                 () => {
-                    setError("Impossibile ottenere la posizione");
+                    setError("Impossible d'obtenir l'emplacement");
                 }
             );
         } else {
-            setError("Geolocalizzazione non supportata");
+            setError("Géolocalisation non prise en charge");
         }
     };
 
     // Funzione per ottenere il meteo e inviarlo al server
     const fetchWeather = async () => {
         if (!cityName && !location) {
-            setError("Inserisci una città o attiva la geolocalizzazione!");
+            setError("Entrez une ville ou activez la géolocalisation !");
             return;
         }
 
@@ -65,10 +65,12 @@ const Weather = () => {
                 temperature: weatherData.main.temp,
                 humidity: weatherData.main.humidity,
                 windSpeed: weatherData.wind.speed,
+                windDirection: weatherData.wind.deg,
+                cloudCoverage: weatherData.clouds.all,
             });
-            console.log('Dati inviati al server:', response.data);
+            console.log('Données envoyées au serveur:', response.data);
         } catch (err) {
-            console.error('Errore nell\'invio dei dati al server:', err);
+            console.error("Erreur lors de l'envoi des données au serveur:", err);
         }
     };
 
@@ -84,26 +86,26 @@ const Weather = () => {
                 type="text"
                 value={cityName}
                 onChange={(e) => setCityName(e.target.value)}
-                placeholder="Inserisci una città"
+                placeholder="Entrez une ville"
             />
-            <button onClick={fetchWeather}>Ottieni Meteo</button>
+            <button onClick={fetchWeather}>Obtenir la météo</button>
 
             {error && <p style={{ color: "red" }}>{error}</p>}
 
             {loading ? (
-                <p>Caricamento...</p>
+                <p>Chargement...</p>
             ) : (
                 weather && (
                     <div>
-                        <h3>Meteo Attuale</h3>
+                        <h3>Météo actuelle</h3>
                         <img
                             src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
                             alt={weather.weather[0].description}
                         />
-                        <p>Nebulosità: {weather.clouds.all}%</p>
-                        <p>Temperatura: {weather.main.temp}°C</p>
-                        <p>Umidità: {weather.main.humidity}%</p>
-                        <p>Vento: {weather.wind.speed} m/s, Direzione: {weather.wind.deg}°</p>
+                        <p>Nébulosité: {weather.clouds.all}%</p>
+                        <p>Température: {weather.main.temp}°C</p>
+                        <p>Humidité: {weather.main.humidity}%</p>
+                        <p>Vent: {weather.wind.speed} m/s, Direction: {weather.wind.deg}°</p>
                     </div>
                 )
             )}
