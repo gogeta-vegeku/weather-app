@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Weather = () => {
+const Weather = ({ onSendWeatherData }) => {
     const [weather, setWeather] = useState(null); 
     const [cityName, setCityName] = useState(""); 
     const [location, setLocation] = useState(null); 
     const [error, setError] = useState(null); 
     const [loading, setLoading] = useState(false); 
 
-    
+    // Ottieni la posizione dell'utente
     const getLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -51,6 +51,18 @@ const Weather = () => {
 
             // Invia i dati meteo al server
             await sendWeatherData(data);
+
+            // Passa i dati al parent component per aggiornare la cronologia
+            onSendWeatherData({
+                location: data.name,
+                temperature: data.main.temp,
+                humidity: data.main.humidity,
+                windSpeed: data.wind.speed,
+                windDirection: data.wind.deg,
+                cloudCoverage: data.clouds.all,
+                description: data.weather[0].description,
+                date: new Date().toLocaleString(),
+            });
         } catch (err) {
             setError(err.message || 'Errore nella richiesta meteo');
         } finally {
